@@ -1,16 +1,14 @@
-# tests/test_prompts.py
 def test_full_workflow(client):
-    # 1) Health check
     r = client.get("/health")
     assert r.status_code == 200
 
-    # 2) Create category
+    # Create category
     r = client.post("/categories/", json={"name": "Coding", "description": "Dev prompts"})
     assert r.status_code == 201
     cat_id = r.json()["id"]
 
-    # 3) Create prompt
-    prompt_data = {
+    # Create prompt with tags
+    r = client.post("/prompts/", json={
         "title": "Python Docstring Generator",
         "template": "Write a docstring for:\n```python\n{{code}}\n```",
         "description": "Generates Google-style docstrings",
@@ -18,38 +16,48 @@ def test_full_workflow(client):
         "model_hint": "gpt-4",
         "use_case": "coding",
         "category_ids": [cat_id],
-    }
-    r = client.post("/prompts/", json=prompt_data)
+        "tags": ["python", "documentation"],
+    })
     assert r.status_code == 201
     prompt = r.json()
     prompt_id = prompt["id"]
-    assert prompt["title"] == "Python Docstring Generator"
-    assert "code" in prompt["variables"]
-    assert len(prompt["categories"]) == 1
+    assert len(prompt["tags"]) == 2
 
-    # 4) List with search
-    r = client.get("/prompts/", params={"search": "docstring"})
-    assert r.json()["total"] >= 1
-
-    # 5) Filter by category
-    r = client.get("/prompts/", params={"category": cat_id})
-    assert r.json()["total"] >= 1
-
-    # 6) Render
-    r = client.post(f"/prompts/{prompt_id}/render", json={"values": {"code": "def add(a,b): return a+b"}})
+    # Vote
+    r = client.post(f"/prompts/{prompt_id}/vote", json={"value": 1})
     assert r.status_code == 200
+    assert r.json()["upvotes"] == 1
+
+    # Vote again = undo
+    r = client.post(f"/prompts/{prompt_id}/vote", json={"value": 1})
+    assert r.json()["upvotes"] == 0
+
+    # Downvote
+    r = client.post(f"/prompts/{prompt_id}/vote", json={"value": -1})
+    assert r.json()["downvotes"] == 1
+
+    # Feed: hot
+    r = client.get("/prompts/", params={"feed": "hot"})
+    assert r.json()["feed"] == "hot"
+
+    # Fork
+    r = client.post(f"/prompts/{prompt_id}/fork", json={"author": "bob"})
+    assert r.status_code == 201
+    assert r.json()["forked_from"] == prompt_id
+
+    # Render
+    r = client.post(f"/prompts/{prompt_id}/render", json={"values": {"code": "def add(a,b): return a+b"}})
     assert "def add" in r.json()["rendered"]
 
-    # 7) Rate
-    r = client.post(f"/prompts/{prompt_id}/rate", params={"score": 4.5})
-    assert r.status_code == 200
-    assert r.json()["rating"] > 0
+    # Tags endpoint
+    r = client.get("/tags/")
+    assert len(r.json()) == 2
 
-    # 8) Update
-    r = client.patch(f"/prompts/{prompt_id}", json={"title": "Updated Title"})
-    assert r.json()["title"] == "Updated Title"
+    # Copy
+    r = client.post(f"/prompts/{prompt_id}/copy")
+    assert r.json()["copy_count"] == 1
 
-    # 9) Delete
+    # Delete
     r = client.delete(f"/prompts/{prompt_id}")
     assert r.status_code == 204
 

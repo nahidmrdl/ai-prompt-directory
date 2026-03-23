@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse
 
 from app.config import get_settings
 from app.database import engine, Base
-from app.routers import prompts, categories
+from app.routers import prompts, categories, tags
 
 settings = get_settings()
 
@@ -35,8 +35,8 @@ app.add_middleware(
 
 app.include_router(prompts.router)
 app.include_router(categories.router)
+app.include_router(tags.router)
 
-# Serve static files (CSS, JS, images)
 static_dir = Path(__file__).parent.parent / "static"
 if static_dir.exists():
     app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
@@ -47,11 +47,7 @@ def root():
     index_file = static_dir / "index.html"
     if index_file.exists():
         return FileResponse(str(index_file))
-    return {
-        "name": settings.APP_NAME,
-        "version": settings.APP_VERSION,
-        "docs": "/docs",
-    }
+    return {"name": settings.APP_NAME, "version": settings.APP_VERSION, "docs": "/docs"}
 
 
 @app.get("/health", tags=["Health"])
