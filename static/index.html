@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Template Directory</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0f23;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* ── Header ── */
+        header {
+            background: linear-gradient(135deg, #1a1a3e 0%, #0f0f23 100%);
+            border-bottom: 1px solid #2d2d5e;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #a78bfa;
+        }
+
+        .logo-icon {
+            font-size: 28px;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .header-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .header-links a:hover {
+            color: #a78bfa;
+            background: rgba(167, 139, 250, 0.1);
+        }
+
+        /* ── Main Layout ── */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* ── Tabs ── */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #2d2d5e;
+            padding-bottom: 0;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            margin-bottom: -1px;
+        }
+
+        .tab:hover { color: #e2e8f0; }
+
+        .tab.active {
+            color: #a78bfa;
+            border-bottom-color: #a78bfa;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ── Search Bar ── */
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .search-bar input, .search-bar select {
+            background: #1a1a3e;
+            border: 1px solid #2d2d5e;
+            color: #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-bar input:focus, .search-bar select:focus {
+            border-color: #a78bfa;
+        }
+
+        .search-bar input { flex: 1; min-width: 250px; }
+        .search-bar select { min-width: 150px; }
+
+        /* ── Buttons ── */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-secondary {
+            background: #1a1a3e;
+            color: #a78bfa;
+            border: 1px solid #2d2d5e;
+        }
+
+        .btn-secondary:hover {
+            background: #2d2d5e;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 12px;
+        }
+
+        /* ── Cards ── */
+        .prompt-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #1a1a3e;
+            border: 1px solid #2d2d5e;
+            border-radius: 14px;
+            padding: 24px;
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            border-color: #a78bfa;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-purple { background: rgba(167, 139, 250, 0.15); color: #a78bfa; }
+        .badge-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .badge-green { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+        .badge-orange { background: rgba(251, 146, 60, 0.15); color: #fb923c; }
+
+        .card-template {
+            background: #0f0f23;
+            border: 1px solid #2d2d5e;
+            border-radius: 8px;
+            padding: 14px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 16px;
+            white-space: pre-wrap;
+            max-height: 120px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-template::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(transparent, #0f0f23);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .star { color: #fbbf24; }
+
+        /* ── Forms ── */
+        .form-section {
+            background: #1a1a3e;
+            border: 1px solid #2d2d5e;
+            border-radius: 14px;
+            padding: 32px;
+            max-width: 700px;
+        }
+
+        .form-section h2 {
+            font-size: 22px;
+            margin-bottom: 24px;
+            color: #a78bfa;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #94a3b8;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            background: #0f0f23;
+            border: 1px solid #2d2d5e;
+            color: #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #a78bfa;
+        }
+
+        .form-group textarea { min-height: 120px; resize: vertical; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* ── Render Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: #1a1a3e;
+            border: 1px solid #2d2d5e;
+            border-radius: 14px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal h2 {
+            color: #a78bfa;
+            margin-bottom: 20px;
+        }
+
+        .rendered-output {
+            background: #0f0f23;
+            border: 1px solid #4ade80;
+            border-radius: 10px;
+            padding: 20px;
+            white-space: pre-wrap;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            color: #4ade80;
+            margin-top: 16px;
+        }
+
+        /* ── Toast Notifications ── */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 300;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s;
+            max-width: 350px;
+        }
+
+        .toast-success { background: #065f46; color: #4ade80; border: 1px solid #4ade80; }
+        .toast-error { background: #7f1d1d; color: #fca5a5; border: 1px solid #dc2626; }
+
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } }
+        @keyframes fadeOut { to { opacity: 0; } }
+
+        /* ── Pagination ── */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .pagination button {
+            padding: 8px 16px;
+            background: #1a1a3e;
+            border: 1px solid #2d2d5e;
+            color: #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .pagination button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .pagination button:not(:disabled):hover { border-color: #a78bfa; }
+        .page-info { font-size: 14px; color: #94a3b8; }
+
+        /* ── Empty State ── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-state p { font-size: 16px; margin-bottom: 8px; }
+
+        /* ── Loading ── */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #a78bfa;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 30px; height: 30px;
+            border: 3px solid #2d2d5e;
+            border-top-color: #a78bfa;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Category Pills ── */
+        .category-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .category-pill {
+            padding: 8px 16px;
+            background: #1a1a3e;
+            border: 1px solid #2d2d5e;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-pill:hover, .category-pill.active {
+            border-color: #a78bfa;
+            color: #a78bfa;
+            background: rgba(167, 139, 250, 0.1);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .prompt-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .header-inner { flex-direction: column; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <div class="header-inner">
+        <div class="logo">
+            <span class="logo-icon">⚡</span>
+            AI Prompt Directory
+        </div>
+        <div class="header-links">
+            <a href="/docs" target="_blank">📄 API Docs</a>
+            <a href="/health" target="_blank">💚 Health</a>
+        </div>
+    </div>
+</header>
+
+<!-- Main -->
+<div class="container">
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('browse')">🔍 Browse Prompts</button>
+        <button class="tab" onclick="switchTab('create')">✨ Create Prompt</button>
+        <button class="tab" onclick="switchTab('categories')">🏷️ Categories</button>
+    </div>
+
+    <!-- ═══════════ BROWSE TAB ═══════════ -->
+    <div id="tab-browse" class="tab-content active">
+        <!-- Search -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search prompts..." oninput="debounceSearch()">
+            <select id="filterCategory" onchange="loadPrompts()">
+                <option value="">All Categories</option>
+            </select>
+            <select id="filterModel" onchange="loadPrompts()">
+                <option value="">All Models</option>
+                <option value="gpt-4">GPT-4</option>
+                <option value="gpt-3.5">GPT-3.5</option>
+                <option value="claude">Claude</option>
+                <option value="gemini">Gemini</option>
+                <option value="any">Any</option>
+            </select>
+            <select id="sortBy" onchange="loadPrompts()">
+                <option value="created_at">Newest</option>
+                <option value="rating">Top Rated</option>
+                <option value="usage_count">Most Used</option>
+            </select>
+        </div>
+
+        <!-- Category Pills -->
+        <div id="categoryPills" class="category-list"></div>
+
+        <!-- Prompt Grid -->
+        <div id="promptGrid" class="prompt-grid"></div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="pagination" style="display:none;">
+            <button onclick="changePage(-1)" id="prevBtn">← Previous</button>
+            <span class="page-info" id="pageInfo"></span>
+            <button onclick="changePage(1)" id="nextBtn">Next →</button>
+        </div>
+    </div>
+
+    <!-- ═══════════ CREATE TAB ═══════════ -->
+    <div id="tab-create" class="tab-content">
+        <div class="form-section">
+            <h2>✨ Create New Prompt Template</h2>
+            <div class="form-group">
+                <label>Title *</label>
+                <input type="text" id="createTitle" placeholder="e.g. Python Code Reviewer">
+            </div>
+            <div class="form-group">
+                <label>Template * <span style="color:#64748b">(use {{variable}} for placeholders)</span></label>
+                <textarea id="createTemplate" placeholder="e.g. Review this {{language}} code for bugs:&#10;&#10;```&#10;{{code}}&#10;```"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="createDescription" placeholder="What does this prompt do?" style="min-height:80px"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Author</label>
+                    <input type="text" id="createAuthor" placeholder="Your name" value="anonymous">
+                </div>
+                <div class="form-group">
+                    <label>Target Model</label>
+                    <select id="createModel">
+                        <option value="any">Any Model</option>
+                        <option value="gpt-4">GPT-4</option>
+                        <option value="gpt-3.5">GPT-3.5</option>
+                        <option value="claude">Claude</option>
+                        <option value="gemini">Gemini</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Use Case</label>
+                    <input type="text" id="createUseCase" placeholder="e.g. coding, writing, marketing" value="general">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="createCategory">
+                        <option value="">No Category</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="createPrompt()">🚀 Create Prompt</button>
+        </div>
+    </div>
+
+    <!-- ═══════════ CATEGORIES TAB ═══════════ -->
+    <div id="tab-categories" class="tab-content">
+        <div class="form-section" style="margin-bottom:24px">
+            <h2>🏷️ Manage Categories</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Category Name *</label>
+                    <input type="text" id="catName" placeholder="e.g. Coding">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" id="catDesc" placeholder="e.g. Software development prompts">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="createCategory()">➕ Add Category</button>
+        </div>
+        <div id="categoryList"></div>
+    </div>
+
+</div>
+
+<!-- Render Modal -->
+<div id="renderModal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+        <h2>🎯 Render Prompt</h2>
+        <div id="renderFields"></div>
+        <button class="btn btn-primary" onclick="submitRender()" id="renderBtn" style="margin-top:16px">⚡ Render</button>
+        <div id="renderOutput"></div>
+        <button class="btn btn-secondary" onclick="closeModal()" style="margin-top:16px">Close</button>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+    // ── Config ──
+    const API = window.location.origin;
+    let currentPage = 1;
+    let totalPages = 1;
+    let searchTimeout;
+    let currentRenderId = null;
+
+    // ── Init ──
+    document.addEventListener('DOMContentLoaded', () => {
+        loadPrompts();
+        loadCategories();
+    });
+
+    // ── Tabs ──
+    function switchTab(name) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById(`tab-${name}`).classList.add('active');
+        if (name === 'categories') loadCategoryManager();
+        if (name === 'browse') loadPrompts();
+        if (name === 'create') loadCategories();
+    }
+
+    // ── Toast ──
+    function toast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const el = document.createElement('div');
+        el.className = `toast toast-${type}`;
+        el.textContent = message;
+        container.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+    }
+
+    // ── Load Prompts ──
+    async function loadPrompts() {
+        const grid = document.getElementById('promptGrid');
+        grid.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading prompts...</p></div>';
+
+        const params = new URLSearchParams();
+        const search = document.getElementById('searchInput').value;
+        const category = document.getElementById('filterCategory').value;
+        const model = document.getElementById('filterModel').value;
+        const sort = document.getElementById('sortBy').value;
+
+        if (search) params.set('search', search);
+        if (category) params.set('category', category);
+        if (model) params.set('model_hint', model);
+        params.set('sort_by', sort);
+        params.set('order', 'desc');
+        params.set('page', currentPage);
+        params.set('size', 12);
+
+        try {
+            const res = await fetch(`${API}/prompts/?${params}`);
+            const data = await res.json();
+            totalPages = data.pages;
+
+            if (data.items.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column:1/-1">
+                        <div class="icon">📝</div>
+                        <p>No prompts found</p>
+                        <p style="font-size:14px">Create your first prompt or try a different search</p>
+                    </div>`;
+                document.getElementById('pagination').style.display = 'none';
+                return;
+            }
+
+            grid.innerHTML = data.items.map(p => renderCard(p)).join('');
+
+            // Pagination
+            const pag = document.getElementById('pagination');
+            pag.style.display = 'flex';
+            document.getElementById('pageInfo').textContent = `Page ${data.page} of ${data.pages} (${data.total} prompts)`;
+            document.getElementById('prevBtn').disabled = data.page <= 1;
+            document.getElementById('nextBtn').disabled = data.page >= data.pages;
+        } catch (err) {
+            grid.innerHTML = '<div class="empty-state"><p>❌ Failed to load prompts</p></div>';
+            toast('Failed to load prompts', 'error');
+        }
+    }
+
+    function renderCard(p) {
+        const stars = '★'.repeat(Math.round(p.rating)) + '☆'.repeat(5 - Math.round(p.rating));
+        const cats = (p.categories || []).map(c =>
+            `<span class="badge badge-purple">${c.name}</span>`
+        ).join('');
+        const variables = (p.variables || []).map(v =>
+            `<span class="badge badge-blue">{{${v}}}</span>`
+        ).join('');
+
+        return `
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">${escHtml(p.title)}</div>
+            </div>
+            <div class="card-meta">
+                ${cats}
+                <span class="badge badge-green">${p.model_hint}</span>
+                <span class="badge badge-orange">${p.use_case}</span>
+            </div>
+            <div class="card-template">${escHtml(p.template)}</div>
+            ${variables ? `<div style="margin-bottom:12px">${variables}</div>` : ''}
+            <p style="font-size:13px;color:#64748b;margin-bottom:12px">${escHtml(p.description || '')}</p>
+            <div class="card-footer">
+                <div class="card-stats">
+                    <span class="star">${stars}</span>
+                    <span>📊 ${p.usage_count} uses</span>
+                    <span>👤 ${p.author}</span>
+                </div>
+                <div class="card-actions">
+                    <button class="btn btn-primary btn-sm" onclick='openRender(${JSON.stringify(p)})'>⚡ Use</button>
+                    <button class="btn btn-secondary btn-sm" onclick="copyTemplate(\`${escJs(p.template)}\`)">📋</button>
+                    <button class="btn btn-danger btn-sm" onclick="deletePrompt('${p.id}')">🗑</button>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    // ── Search Debounce ──
+    function debounceSearch() {
+        clearTimeout(searchTimeout);
+        currentPage = 1;
+        searchTimeout = setTimeout(loadPrompts, 400);
+    }
+
+    // ── Pagination ──
+    function changePage(delta) {
+        currentPage += delta;
+        loadPrompts();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── Categories ──
+    async function loadCategories() {
+        try {
+            const res = await fetch(`${API}/categories/`);
+            const cats = await res.json();
+
+            // Filter dropdown
+            const filter = document.getElementById('filterCategory');
+            filter.innerHTML = '<option value="">All Categories</option>' +
+                cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+            // Create form dropdown
+            const create = document.getElementById('createCategory');
+            create.innerHTML = '<option value="">No Category</option>' +
+                cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+            // Pills
+            const pills = document.getElementById('categoryPills');
+            pills.innerHTML = cats.map(c =>
+                `<span class="category-pill" onclick="filterByCategory('${c.id}', this)">${c.name}</span>`
+            ).join('');
+        } catch (err) {}
+    }
+
+    function filterByCategory(id, el) {
+        document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+        const filter = document.getElementById('filterCategory');
+        if (filter.value === id) {
+            filter.value = '';
+        } else {
+            filter.value = id;
+            el.classList.add('active');
+        }
+        currentPage = 1;
+        loadPrompts();
+    }
+
+    async function loadCategoryManager() {
+        const container = document.getElementById('categoryList');
+        try {
+            const res = await fetch(`${API}/categories/`);
+            const cats = await res.json();
+            if (cats.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No categories yet</p></div>';
+                return;
+            }
+            container.innerHTML = '<div class="prompt-grid">' + cats.map(c => `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">${escHtml(c.name)}</div>
+                        <button class="btn btn-danger btn-sm" onclick="deleteCategory('${c.id}')">🗑</button>
+                    </div>
+                    <p style="color:#94a3b8;font-size:14px">${escHtml(c.description || 'No description')}</p>
+                </div>
+            `).join('') + '</div>';
+        } catch (err) {
+            container.innerHTML = '<div class="empty-state"><p>Failed to load categories</p></div>';
+        }
+    }
+
+    async function createCategory() {
+        const name = document.getElementById('catName').value.trim();
+        const desc = document.getElementById('catDesc').value.trim();
+        if (!name) return toast('Category name is required', 'error');
+
+        try {
+            const res = await fetch(`${API}/categories/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, description: desc }),
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.detail || 'Failed');
+            }
+            toast(`Category "${name}" created!`);
+            document.getElementById('catName').value = '';
+            document.getElementById('catDesc').value = '';
+            loadCategoryManager();
+            loadCategories();
+        } catch (err) {
+            toast(err.message, 'error');
+        }
+    }
+
+    async function deleteCategory(id) {
+        if (!confirm('Delete this category?')) return;
+        try {
+            await fetch(`${API}/categories/${id}`, { method: 'DELETE' });
+            toast('Category deleted');
+            loadCategoryManager();
+            loadCategories();
+        } catch (err) {
+            toast('Failed to delete', 'error');
+        }
+    }
+
+    // ── Create Prompt ──
+    async function createPrompt() {
+        const title = document.getElementById('createTitle').value.trim();
+        const template = document.getElementById('createTemplate').value.trim();
+        const description = document.getElementById('createDescription').value.trim();
+        const author = document.getElementById('createAuthor').value.trim() || 'anonymous';
+        const model_hint = document.getElementById('createModel').value;
+        const use_case = document.getElementById('createUseCase').value.trim() || 'general';
+        const catId = document.getElementById('createCategory').value;
+
+        if (!title) return toast('Title is required', 'error');
+        if (!template) return toast('Template is required', 'error');
+
+        const body = {
+            title, template, description, author,
+            model_hint, use_case,
+            category_ids: catId ? [catId] : [],
+        };
+
+        try {
+            const res = await fetch(`${API}/prompts/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.detail || 'Failed to create');
+            }
+            toast(`Prompt "${title}" created! 🎉`);
+            // Clear form
+            document.getElementById('createTitle').value = '';
+            document.getElementById('createTemplate').value = '';
+            document.getElementById('createDescription').value = '';
+            // Switch to browse
+            switchTabDirect('browse');
+            loadPrompts();
+        } catch (err) {
+            toast(err.message, 'error');
+        }
+    }
+
+    // ── Delete Prompt ──
+    async function deletePrompt(id) {
+        if (!confirm('Delete this prompt?')) return;
+        try {
+            await fetch(`${API}/prompts/${id}`, { method: 'DELETE' });
+            toast('Prompt deleted');
+            loadPrompts();
+        } catch (err) {
+            toast('Failed to delete', 'error');
+        }
+    }
+
+    // ── Render Modal ──
+    function openRender(prompt) {
+        currentRenderId = prompt.id;
+        const modal = document.getElementById('renderModal');
+        const fields = document.getElementById('renderFields');
+        const output = document.getElementById('renderOutput');
+        output.innerHTML = '';
+
+        const vars = prompt.variables || [];
+        if (vars.length === 0) {
+            fields.innerHTML = '<p style="color:#94a3b8">This prompt has no variables. Click Render to get it as-is.</p>';
+        } else {
+            fields.innerHTML = vars.map(v => `
+                <div class="form-group">
+                    <label>{{${v}}}</label>
+                    <textarea id="var-${v}" placeholder="Enter value for ${v}" style="min-height:80px"></textarea>
+                </div>
+            `).join('');
+        }
+        modal.classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('renderModal').classList.remove('active');
+    }
+
+    async function submitRender() {
+        const fields = document.getElementById('renderFields');
+        const inputs = fields.querySelectorAll('textarea');
+        const values = {};
+        inputs.forEach(input => {
+            const varName = input.id.replace('var-', '');
+            values[varName] = input.value;
+        });
+
+        try {
+            const res = await fetch(`${API}/prompts/${currentRenderId}/render`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ values }),
+            });
+            const data = await res.json();
+            document.getElementById('renderOutput').innerHTML = `
+                <div class="rendered-output">${escHtml(data.rendered)}</div>
+                <button class="btn btn-secondary btn-sm" onclick="copyText(\`${escJs(data.rendered)}\`)" style="margin-top:8px">📋 Copy Result</button>
+            `;
+            toast('Prompt rendered! ⚡');
+        } catch (err) {
+            toast('Failed to render', 'error');
+        }
+    }
+
+    // ── Helpers ──
+    function switchTabDirect(name) {
+        document.querySelectorAll('.tab').forEach((t, i) => {
+            t.classList.toggle('active', ['browse', 'create', 'categories'][i] === name);
+        });
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.getElementById(`tab-${name}`).classList.add('active');
+    }
+
+    function escHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    function escJs(str) {
+        return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+    }
+
+    function copyTemplate(text) {
+        navigator.clipboard.writeText(text);
+        toast('Template copied! 📋');
+    }
+
+    function copyText(text) {
+        navigator.clipboard.writeText(text);
+        toast('Copied to clipboard! 📋');
+    }
+</script>
+
+</body>
+</html>
